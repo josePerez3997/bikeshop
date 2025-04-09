@@ -1,0 +1,112 @@
+@import '../../styles/abstracts/variables';
+@import '../../styles/abstracts/mixins';
+
+.home-page {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+
+    &__main {
+        flex: 1;
+        padding: $spacing-lg;
+
+        @include responsive(md) {
+            padding: $spacing-xl;
+        }
+    }
+
+    &__search-container {
+        display: flex;
+        margin: $spacing-xl 0;
+
+        @include responsive(xs) {
+            flex-direction: column;
+        }
+    }
+
+    &__search-input {
+        flex: 1;
+        padding: $spacing-md;
+        border: 1px solid $border-color;
+        border-radius: $border-radius-md;
+        font-size: 16px;
+
+        @include responsive(xs) {
+            margin-bottom: $spacing-sm;
+        }
+    }
+
+    &__search-button {
+        padding: $spacing-md $spacing-lg;
+        background-color: $primary-color;
+        color: white;
+        border: none;
+        border-radius: $border-radius-md;
+        margin-left: $spacing-sm;
+        cursor: pointer;
+
+        @include responsive(xs) {
+            margin-left: 0;
+        }
+
+        &:hover {
+            background-color: darken($primary-color, 10%);
+        }
+    }
+
+    &__products-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: $spacing-lg;
+    }
+
+    &__products-count {
+        font-weight: $font-weight-medium;
+    }
+
+    &__filter-select {
+        padding: $spacing-sm $spacing-md;
+        border: 1px solid $border-color;
+        border-radius: $border-radius-sm;
+        background-color: white;
+    }
+
+    &__products-grid {
+        display: grid;
+        grid-template-columns: repeat(1, 1fr);
+        gap: $spacing-lg;
+
+        @include responsive(sm) {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        @include responsive(md) {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        @include responsive(lg) {
+            grid-template-columns: repeat(4, 1fr);
+        }
+    }
+
+    &__reviews {
+        margin-top: $spacing-xl;
+
+        h2 {
+            margin-bottom: $spacing-lg;
+            font-size: 24px;
+            font-weight: $font-weight-bold;
+        }
+    }
+
+    &__reviews-container {
+        display: grid;
+        grid-template-columns: repeat(1, 1fr);
+        gap: $spacing-lg;
+
+        @include responsive(md) {
+            grid-template-columns: repeat(3, 1fr);
+        }
+    }
+}

@@ -1,0 +1,161 @@
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 $spacing-md;
+
+    @include responsive(md) {
+        padding: 0 $spacing-lg;
+    }
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: $spacing-md;
+
+    @for $i from 1 through 12 {
+        &__col-#{$i} {
+            grid-column: span $i;
+
+            @include responsive(xs) {
+                grid-column: 1 / -1;
+            }
+        }
+    }
+
+    @include responsive(sm) {
+        @for $i from 1 through 12 {
+            &__col-sm-#{$i} {
+                grid-column: span $i;
+            }
+        }
+    }
+
+    @include responsive(md) {
+        @for $i from 1 through 12 {
+            &__col-md-#{$i} {
+                grid-column: span $i;
+            }
+        }
+    }
+
+    @include responsive(lg) {
+        @for $i from 1 through 12 {
+            &__col-lg-#{$i} {
+                grid-column: span $i;
+            }
+        }
+    }
+
+    &--gap-sm {
+        gap: $spacing-sm;
+    }
+
+    &--gap-md {
+        gap: $spacing-md;
+    }
+
+    &--gap-lg {
+        gap: $spacing-lg;
+    }
+
+    &--gap-xl {
+        gap: $spacing-xl;
+    }
+
+    &--no-gap {
+        gap: 0;
+    }
+}
+
+.flex-row {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 -#{$spacing-sm};
+
+    &--gap-sm {
+        margin: 0 -#{$spacing-xs};
+    }
+
+    &--gap-lg {
+        margin: 0 -#{$spacing-md};
+    }
+
+    &--no-gap {
+        margin: 0;
+    }
+
+    &--center {
+        justify-content: center;
+    }
+
+    &--start {
+        justify-content: flex-start;
+    }
+
+    &--end {
+        justify-content: flex-end;
+    }
+
+    &--between {
+        justify-content: space-between;
+    }
+
+    &--around {
+        justify-content: space-around;
+    }
+
+    &--middle {
+        align-items: center;
+    }
+
+    &--top {
+        align-items: flex-start;
+    }
+
+    &--bottom {
+        align-items: flex-end;
+    }
+}
+
+.flex-col {
+    flex: 0 0 100%;
+    padding: 0 $spacing-sm;
+
+    .flex-row--gap-sm & {
+        padding: 0 $spacing-xs;
+    }
+
+    .flex-row--gap-lg & {
+        padding: 0 $spacing-md;
+    }
+
+    .flex-row--no-gap & {
+        padding: 0;
+    }
+
+    @include responsive(sm) {
+        @for $i from 1 through 12 {
+            &--sm-#{$i} {
+                flex: 0 0 (100% / 12 * $i);
+            }
+        }
+    }
+
+    @include responsive(md) {
+        @for $i from 1 through 12 {
+            &--md-#{$i} {
+                flex: 0 0 (100% / 12 * $i);
+            }
+        }
+    }
+
+    @include responsive(lg) {
+        @for $i from 1 through 12 {
+            &--lg-#{$i} {
+                flex: 0 0 (100% / 12 * $i);
+            }
+        }
+    }
+}

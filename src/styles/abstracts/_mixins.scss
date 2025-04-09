@@ -1,0 +1,57 @@
+@mixin responsive($breakpoint) {
+    @if $breakpoint ==xs {
+        @media (max-width: $breakpoint-xs) {
+            @content;
+        }
+    }
+
+    @else if $breakpoint ==sm {
+        @media (min-width: $breakpoint-sm) {
+            @content;
+        }
+    }
+
+    @else if $breakpoint ==md {
+        @media (min-width: $breakpoint-md) {
+            @content;
+        }
+    }
+
+    @else if $breakpoint ==lg {
+        @media (min-width: $breakpoint-lg) {
+            @content;
+        }
+    }
+
+    @else if $breakpoint ==xl {
+        @media (min-width: $breakpoint-xl) {
+            @content;
+        }
+    }
+}
+
+@mixin flex($direction: row, $justify: flex-start, $align: stretch, $wrap: nowrap) {
+    display: flex;
+    flex-direction: $direction;
+    justify-content: $justify;
+    align-items: $align;
+    flex-wrap: $wrap;
+}
+
+@mixin box-shadow($level: 1) {
+    @if $level ==1 {
+        box-shadow: $shadow-sm;
+    }
+
+    @else if $level ==2 {
+        box-shadow: $shadow-md;
+    }
+
+    @else if $level ==3 {
+        box-shadow: $shadow-lg;
+    }
+}
+
+@mixin transition($property: all, $speed: $transition-normal) {
+    transition: $property $speed;
+}
