@@ -1,0 +1,86 @@
+body {
+    font-family: $font-primary;
+    font-size: $font-size-base;
+    line-height: 1.5;
+    color: $text-color;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: $font-weight-bold;
+    line-height: 1.2;
+    margin-bottom: $spacing-md;
+}
+
+h1 {
+    font-size: 32px;
+
+    @include responsive(md) {
+        font-size: 40px;
+    }
+}
+
+h2 {
+    font-size: 24px;
+
+    @include responsive(md) {
+        font-size: 32px;
+    }
+}
+
+h3 {
+    font-size: 20px;
+
+    @include responsive(md) {
+        font-size: 24px;
+    }
+}
+
+h4 {
+    font-size: 18px;
+}
+
+h5 {
+    font-size: 16px;
+}
+
+h6 {
+    font-size: 14px;
+}
+
+p {
+    margin-bottom: $spacing-md;
+}
+
+a {
+    color: $primary-color;
+    text-decoration: none;
+    @include transition(color, $transition-fast);
+
+    &:hover {
+        color: darken($primary-color, 10%);
+    }
+}
+
+strong,
+b {
+    font-weight: $font-weight-bold;
+}
+
+small {
+    font-size: 80%;
+}
+
+ul,
+ol {
+    padding-left: $spacing-lg;
+    margin-bottom: $spacing-md;
+}
+
+li {
+    margin-bottom: $spacing-xs;
+}

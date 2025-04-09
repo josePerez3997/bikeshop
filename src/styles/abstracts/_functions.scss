@@ -1,0 +1,56 @@
+@function rem($pixels, $context: 16) {
+    @return ($pixels / $context) * 1rem;
+}
+
+@function em($pixels, $context: 16) {
+    @return ($pixels / $context) * 1em;
+}
+
+@function strip-unit($number) {
+    @if type-of($number)=="number" and not unitless($number) {
+        @return $number / ($number * 0 + 1);
+    }
+
+    @return $number;
+}
+
+@function tint($color, $percentage) {
+    @return mix(white, $color, $percentage);
+}
+
+@function shade($color, $percentage) {
+    @return mix(black, $color, $percentage);
+}
+
+@function fluid-size($min-size, $max-size, $min-width, $max-width) {
+    $factor: 1 / ($max-width - $min-width) * ($max-size - $min-size);
+    $base-size: $min-size - $factor * $min-width;
+
+    @return calc(#{$base-size} + #{100vw * $factor});
+}
+
+$z-indexes: (
+    modal: 1000,
+    overlay: 900,
+    dropdown: 800,
+    header: 700,
+    footer: 600,
+    default: 1
+);
+
+@function z($key) {
+    @if map-has-key($z-indexes, $key) {
+        @return map-get($z-indexes, $key);
+    }
+
+    @return map-get($z-indexes, default);
+}
+
+@function grid-column-width($columns, $total-columns: 12, $gutter: $spacing-md) {
+    $column-width: 100% / $total-columns * $columns;
+    $gutter-width: (
+        $total-columns - $columns) * $gutter / $total-columns;
+
+    @return calc(#{$column-width} - #{$gutter-width}
+);
+}

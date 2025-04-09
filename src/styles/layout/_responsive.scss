@@ -1,0 +1,191 @@
+
+.hidden {
+    display: none !important;
+}
+
+.hidden-xs {
+    @include responsive(xs) {
+        display: none !important;
+    }
+}
+
+.hidden-sm {
+    @include responsive(sm) {
+        display: none !important;
+    }
+}
+
+.hidden-md {
+    @include responsive(md) {
+        display: none !important;
+    }
+}
+
+.hidden-lg {
+    @include responsive(lg) {
+        display: none !important;
+    }
+}
+
+.hidden-xl {
+    @include responsive(xl) {
+        display: none !important;
+    }
+}
+
+.visible-xs {
+    display: none !important;
+
+    @include responsive(xs) {
+        display: block !important;
+    }
+}
+
+.visible-sm {
+    display: none !important;
+
+    @include responsive(sm) {
+        display: block !important;
+    }
+}
+
+.visible-md {
+    display: none !important;
+
+    @include responsive(md) {
+        display: block !important;
+    }
+}
+
+.visible-lg {
+    display: none !important;
+
+    @include responsive(lg) {
+        display: block !important;
+    }
+}
+
+.visible-xl {
+    display: none !important;
+
+    @include responsive(xl) {
+        display: block !important;
+    }
+}
+
+.text-center-xs {
+    @include responsive(xs) {
+        text-align: center !important;
+    }
+}
+
+.text-left-xs {
+    @include responsive(xs) {
+        text-align: left !important;
+    }
+}
+
+.text-right-xs {
+    @include responsive(xs) {
+        text-align: right !important;
+    }
+}
+
+.text-center-sm {
+    @include responsive(sm) {
+        text-align: center !important;
+    }
+}
+
+.text-left-sm {
+    @include responsive(sm) {
+        text-align: left !important;
+    }
+}
+
+.text-right-sm {
+    @include responsive(sm) {
+        text-align: right !important;
+    }
+}
+
+// Responsive margins
+.mt-auto-xs {
+    @include responsive(xs) {
+        margin-top: auto !important;
+    }
+}
+
+.mb-auto-xs {
+    @include responsive(xs) {
+        margin-bottom: auto !important;
+    }
+}
+
+.ml-auto-xs {
+    @include responsive(xs) {
+        margin-left: auto !important;
+    }
+}
+
+.mr-auto-xs {
+    @include responsive(xs) {
+        margin-right: auto !important;
+    }
+}
+
+// Responsive ordering
+@for $i from 1 through 12 {
+    .order-#{$i} {
+        order: $i;
+    }
+
+    .order-xs-#{$i} {
+        @include responsive(xs) {
+            order: $i;
+        }
+    }
+
+    .order-sm-#{$i} {
+        @include responsive(sm) {
+            order: $i;
+        }
+    }
+
+    .order-md-#{$i} {
+        @include responsive(md) {
+            order: $i;
+        }
+    }
+
+    .order-lg-#{$i} {
+        @include responsive(lg) {
+            order: $i;
+        }
+    }
+}
+
+// Responsive flex utilities
+.flex-xs-column {
+    @include responsive(xs) {
+        flex-direction: column !important;
+    }
+}
+
+.flex-sm-column {
+    @include responsive(sm) {
+        flex-direction: column !important;
+    }
+}
+
+.flex-xs-row {
+    @include responsive(xs) {
+        flex-direction: row !important;
+    }
+}
+
+.flex-sm-row {
+    @include responsive(sm) {
+        flex-direction: row !important;
+    }
+}
