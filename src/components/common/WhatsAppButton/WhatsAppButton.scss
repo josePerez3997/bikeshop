@@ -1,0 +1,41 @@
+@import '../../../styles/abstracts/variables';
+@import '../../../styles/abstracts/mixins';
+
+.whatsapp-button {
+    position: fixed;
+    bottom: $spacing-sm;
+    right: $spacing-sm;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #25D366;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    z-index: 100;
+    @include transition(transform, $transition-fast);
+
+    @include responsive(md) {
+        width: 50px;
+        height: 50px;
+        bottom: $spacing-lg;
+        right: $spacing-lg;
+    }
+
+    &:hover {
+        transform: scale(1.1);
+    }
+
+    &__icon {
+        width: 20px;
+        height: 20px;
+
+        @include responsive(md) {
+            width: 30px;
+            height: 30px;
+        }
+    }
+}
