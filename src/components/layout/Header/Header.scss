@@ -6,7 +6,7 @@
     position: relative;
 
     &__slider {
-        background-color: lighten($primary-color, 40%);
+        background-color: rgb(24, 24, 24);
         padding: $spacing-xs 0;
         text-align: center;
         overflow: hidden;
@@ -15,6 +15,8 @@
             font-weight: $font-weight-medium;
             font-size: 14px;
             animation: fadeInOut 1s ease-in-out;
+            font-weight: $font-weight-bold;
+            color: $text-color-header;
         }
     }
 
@@ -29,19 +31,40 @@
         text-decoration: none;
         color: $text-color;
         position: absolute;
-        top: 33px;
+        top: 35px;
         transform: translateY(-50%);
         z-index: 100;
+
+        @include responsive(md) {
+            top: 40px;
+        }
     }
 
     &__logo {
-        background-color: white;
+        background-color: rgb(41, 41, 41);
         padding: $spacing-md $spacing-lg;
         text-align: center;
         font-weight: $font-weight-bold;
         font-size: 24px;
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 5);
         clip-path: polygon(0 0, 100% 0, 100% 75%, 50% 100%, 0 75%);
+        @include transition(all, $transition-slow);
+
+
+        &:hover {
+            background-color: darken(rgb(41, 41, 41), 10%);
+            transform: scale(1.03);
+        }
+
+        &-img {
+            max-width: 100%;
+            max-height: 40px;
+            display: block;
+            transition: all 2s;
+
+            @include responsive(md) {
+                max-height: 50px;
+            }
+        }
     }
 }
 

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import LogoImage from '../../../assets/images/logo.webp';
 import './Header.scss';
 
 const Header: React.FC = () => {
@@ -13,11 +14,11 @@ const Header: React.FC = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentMessageIndex(prevIndex => 
+      setCurrentMessageIndex(prevIndex =>
         prevIndex === sliderMessages.length - 1 ? 0 : prevIndex + 1
       );
     }, 5000);
-    
+
     return () => clearInterval(interval);
   }, []);
 
@@ -28,10 +29,17 @@ const Header: React.FC = () => {
           {sliderMessages[currentMessageIndex]}
         </div>
       </div>
-      
+
       <div className="header__main">
         <Link to="/" className="header__logo-container">
-          <div className="header__logo">BikeShop</div>
+          <div className="header__logo">
+            <img
+              src={LogoImage}
+              alt="BikeShop Logo"
+              title='Inicio'
+              className="header__logo-img"
+            />
+          </div>
         </Link>
       </div>
     </header>
