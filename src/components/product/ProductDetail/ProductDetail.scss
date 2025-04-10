@@ -1,0 +1,135 @@
+@import '../../../styles/abstracts/variables';
+@import '../../../styles/abstracts/mixins';
+
+.product-detail {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-lg;
+    margin-bottom: $spacing-xl;
+
+    @include responsive(md) {
+        flex-direction: row;
+        align-items: flex-start;
+        margin-top: 90px;
+    }
+
+    &__image-container {
+        position: relative;
+        width: 100%;
+        background-color: white;
+        border-radius: $border-radius-md;
+        overflow: hidden;
+
+        @include responsive(md) {
+            position: sticky;
+            top: $spacing-xs;
+        }
+    }
+
+    &__image {
+        width: 100%;
+        aspect-ratio: 1/1;
+        object-fit: contain;
+        cursor: zoom-in;
+        transition: transform 0.3s ease;
+
+        &--zoomed {
+            transform: scale(1.5);
+            cursor: zoom-out;
+        }
+    }
+
+    &__zoom-instruction {
+        position: absolute;
+        bottom: $spacing-sm;
+        left: 0;
+        width: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        color: white;
+        text-align: center;
+        padding: $spacing-xs;
+        font-size: 14px;
+    }
+
+    &__info {
+        width: 100%;
+
+        @include responsive(md) {
+            flex: 0 0 50%;
+        }
+    }
+
+    &__name {
+        font-size: 24px;
+        font-weight: $font-weight-bold;
+        margin-bottom: $spacing-sm;
+
+        @include responsive(md) {
+            font-size: 32px;
+        }
+    }
+
+    &__price {
+        font-size: 24px;
+        font-weight: $font-weight-bold;
+        color: $primary-color;
+        margin-bottom: $spacing-md;
+    }
+
+    &__stock {
+        display: flex;
+        align-items: center;
+        margin-bottom: $spacing-lg;
+
+        &-label {
+            margin-right: $spacing-sm;
+            font-weight: $font-weight-medium;
+        }
+
+        &-value {
+            &--in-stock {
+                color: $text-color;
+            }
+
+            &--out-of-stock {
+                color: #e74c3c;
+            }
+        }
+    }
+
+    &__actions {
+        margin-bottom: $spacing-lg;
+    }
+
+    &__shipping {
+        background-color: lighten($border-color, 5%);
+        padding: $spacing-md;
+        border-radius: $border-radius-md;
+        margin-bottom: $spacing-lg;
+
+        &-title {
+            font-weight: $font-weight-medium;
+            margin-bottom: $spacing-xs;
+        }
+
+        &-text {
+            font-size: 14px;
+            color: darken($border-color, 40%);
+            margin: 0;
+        }
+    }
+
+    &__description {
+        &-title {
+            font-size: 18px;
+            font-weight: $font-weight-medium;
+            margin-bottom: $spacing-md;
+            color: $primary-color;
+        }
+
+        &-text {
+            line-height: 1.6;
+            color: darken($border-color, 50%);
+        }
+    }
+}
