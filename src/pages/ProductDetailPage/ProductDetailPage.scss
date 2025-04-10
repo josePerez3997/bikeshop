@@ -1,0 +1,50 @@
+@import '../../styles/abstracts/variables';
+@import '../../styles/abstracts/mixins';
+
+.product-detail-page {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+
+    &__main {
+        flex: 1;
+        padding: $spacing-md;
+        max-width: 1200px;
+        margin: 0 auto;
+        width: 100%;
+
+        @include responsive(md) {
+            padding: $spacing-lg;
+        }
+    }
+
+    &__error {
+        text-align: center;
+        padding: $spacing-xl 0;
+
+        h2 {
+            color: $primary-color;
+            margin-bottom: $spacing-md;
+        }
+
+        p {
+            margin-bottom: $spacing-lg;
+            color: darken($border-color, 30%);
+        }
+    }
+
+    &__back-button {
+        padding: $spacing-sm $spacing-lg;
+        background-color: $primary-color;
+        color: white;
+        border: none;
+        border-radius: $border-radius-md;
+        font-weight: $font-weight-medium;
+        cursor: pointer;
+        @include transition(background-color, $transition-fast);
+
+        &:hover {
+            background-color: darken($primary-color, 10%);
+        }
+    }
+}
