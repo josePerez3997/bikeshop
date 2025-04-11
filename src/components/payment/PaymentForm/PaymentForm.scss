@@ -1,0 +1,75 @@
+@import '../../../styles/abstracts/variables';
+@import '../../../styles/abstracts/mixins';
+
+.payment-form {
+    margin-bottom: $spacing-xl;
+
+    &__title {
+        font-size: 24px;
+        font-weight: $font-weight-bold;
+        margin-bottom: $spacing-lg;
+    }
+
+    &__container {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: $spacing-xl;
+
+        @include responsive(md) {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
+
+    &__section-title {
+        font-size: 18px;
+        font-weight: $font-weight-medium;
+        margin-bottom: $spacing-lg;
+        color: $primary-color;
+    }
+
+    &__group {
+        margin-bottom: $spacing-md;
+    }
+
+    &__row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: $spacing-md;
+    }
+
+    &__label {
+        display: block;
+        margin-bottom: $spacing-xs;
+        font-size: 14px;
+        font-weight: $font-weight-medium;
+    }
+
+    &__input {
+        width: 100%;
+        padding: $spacing-sm $spacing-md;
+        border: 1px solid $border-color;
+        border-radius: $border-radius-sm;
+        font-size: 16px;
+        @include transition(border-color, $transition-fast);
+
+        &:focus {
+            outline: none;
+            border-color: $primary-color;
+        }
+
+        &--error {
+            border-color: #e74c3c;
+        }
+    }
+
+    &__error {
+        display: block;
+        font-size: 12px;
+        color: #e74c3c;
+        margin-top: $spacing-xs;
+    }
+
+    &__submit {
+        margin-top: $spacing-lg;
+    }
+}

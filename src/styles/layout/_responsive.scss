@@ -109,7 +109,6 @@
     }
 }
 
-// Responsive margins
 .mt-auto-xs {
     @include responsive(xs) {
         margin-top: auto !important;
@@ -134,7 +133,6 @@
     }
 }
 
-// Responsive ordering
 @for $i from 1 through 12 {
     .order-#{$i} {
         order: $i;
@@ -165,7 +163,6 @@
     }
 }
 
-// Responsive flex utilities
 .flex-xs-column {
     @include responsive(xs) {
         flex-direction: column !important;

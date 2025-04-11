@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './ProductCard.scss';
 
 export interface ProductCardProps {
@@ -11,10 +11,12 @@ export interface ProductCardProps {
         stock: number;
         isBestSeller?: boolean;
     };
+    onBuyClick?: (productId: number) => void;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
+const ProductCard: React.FC<ProductCardProps> = ({ product, onBuyClick }) => {
     const [isHovered, setIsHovered] = useState(false);
+    const navigate = useNavigate();
 
     const handleMouseEnter = () => {
         setIsHovered(true);
@@ -22,6 +24,17 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
     const handleMouseLeave = () => {
         setIsHovered(false);
+    };
+
+    const handlePayButtonClick = (e: React.MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (onBuyClick) {
+            onBuyClick(product.id);
+        } else {
+            navigate(`/product/${product.id}`);
+        }
     };
 
     return (
@@ -45,7 +58,10 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                     />
 
                     <div className={`product-card__hover-container ${isHovered ? 'product-card__hover-container--active' : ''}`}>
-                        <button className="product-card__button">
+                        <button
+                            className="product-card__button"
+                            onClick={handlePayButtonClick}
+                        >
                             Pagar
                         </button>
                     </div>
