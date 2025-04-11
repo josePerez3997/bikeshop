@@ -1,0 +1,60 @@
+@import '../../../styles/abstracts/variables';
+@import '../../../styles/abstracts/mixins';
+
+.payment-summary {
+    background-color: $background-color;
+    border-radius: $border-radius-md;
+    padding: $spacing-lg;
+    @include box-shadow(1);
+
+    &__title {
+        font-size: 24px;
+        font-weight: $font-weight-bold;
+        margin-bottom: $spacing-lg;
+        padding-bottom: $spacing-md;
+        border-bottom: 1px solid $border-color;
+    }
+
+    &__product {
+        display: grid;
+        grid-template-columns: 1fr auto auto;
+        gap: $spacing-md;
+        margin-bottom: $spacing-lg;
+        padding-bottom: $spacing-md;
+        border-bottom: 1px solid $border-color;
+
+        &-name {
+            font-weight: $font-weight-medium;
+        }
+
+        &-quantity {
+            color: darken($border-color, 30%);
+        }
+
+        &-price {
+            font-weight: $font-weight-medium;
+        }
+    }
+
+    &__costs {
+        margin-bottom: $spacing-lg;
+    }
+
+    &__row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: $spacing-md;
+
+        &--total {
+            font-size: 20px;
+            font-weight: $font-weight-bold;
+            margin-top: $spacing-lg;
+            padding-top: $spacing-md;
+            border-top: 1px solid $border-color;
+        }
+    }
+
+    &__action {
+        margin-top: $spacing-xl;
+    }
+}

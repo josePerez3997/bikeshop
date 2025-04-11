@@ -1,97 +1,113 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Header from '../../components/layout/Header';
 import Banner from '../../components/layout/Banner';
 import Footer from '../../components/layout/Footer';
 import WhatsAppButton from '../../components/common/WhatsAppButton';
 import ProductCard from '../../components/product/ProductCard';
 import ProductFilter from '../../components/product/ProductFilter';
+import Loading from '../../components/common/Loading';
+import Modal from '../../components/common/Modal';
+import PaymentForm from '../../components/payment/PaymentForm';
+import PaymentSummary from '../../components/payment/PaymentSummary';
+import { useProducts } from '../../hooks/useProduct';
+import { usePayment } from '../../hooks/usePayment';
+import { CustomerInfo, PaymentInfo } from '../../types/payment';
 import './HomePage.scss';
 
-const mockProducts = [
-  {
-    id: 1,
-    name: 'Bicicleta Montañera Elite',
-    description: 'Bicicleta de montaña con marco de aluminio, suspensión delantera y 21 velocidades.',
-    price: 1299000,
-    imageUrl: 'https://images.unsplash.com/photo-1571068316344-75bc76f77890?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
-    stock: 15,
-    isBestSeller: true
-  },
-  {
-    id: 2,
-    name: 'Bicicleta Urbana Clásica',
-    description: 'Bicicleta urbana con estilo retro, ideal para desplazamientos diarios en la ciudad.',
-    price: 850000,
-    imageUrl: 'https://images.unsplash.com/photo-1485965120184-e220f721d03e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
-    stock: 8,
-    isBestSeller: false
-  },
-  {
-    id: 3,
-    name: 'Bicicleta Plegable Compacta',
-    description: 'Bicicleta plegable ligera y compacta, perfecta para combinar con transporte público.',
-    price: 750000,
-    imageUrl: 'https://images.unsplash.com/photo-1583087253076-6de06c243071?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1471&q=80',
-    stock: 12,
-    isBestSeller: true
-  },
-  {
-    id: 4,
-    name: 'Bicicleta de Ruta Profesional',
-    description: 'Bicicleta de carretera con marco de carbono, grupos Shimano Ultegra y ruedas aerodinámicas.',
-    price: 3200000,
-    imageUrl: 'https://images.unsplash.com/photo-1511994298241-608e28f14fde?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
-    stock: 5,
-    isBestSeller: false
-  },
-];
-
 const HomePage: React.FC = () => {
-  const [products, setProducts] = useState(mockProducts);
+  const navigate = useNavigate();
+  const { products, loading, error, loadProducts, sortProducts, loadProductById } = useProducts();
+  const { processPayment, loading: paymentLoading, setCustomer, setPayment } = usePayment();
+
   const [sortOption, setSortOption] = useState('best-seller');
   const [searchTerm, setSearchTerm] = useState('');
+  const [displayProducts, setDisplayProducts] = useState<any[]>([]);
 
-  const filteredAndSortedProducts = () => {
-    let result = [...products];
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [paymentStep, setPaymentStep] = useState<'form' | 'summary'>('form');
+  const [selectedProductId, setSelectedProductId] = useState<number | null>(null);
 
-    if (searchTerm) {
-      result = result.filter(product =>
-        product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        product.description.toLowerCase().includes(searchTerm.toLowerCase())
-      );
+  useEffect(() => {
+    loadProducts();
+  }, [loadProducts]);
+
+  useEffect(() => {
+    if (products.length > 0) {
+      let result = [...products];
+
+      if (searchTerm) {
+        result = result.filter(product =>
+          product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          product.description.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+      }
+
+      result = sortProducts(result, sortOption);
+      setDisplayProducts(result);
     }
-
-    switch (sortOption) {
-      case 'best-seller':
-        result = result.sort((a, b) => (b.isBestSeller ? 1 : 0) - (a.isBestSeller ? 1 : 0));
-        break;
-      case 'a-z':
-        result = result.sort((a, b) => a.name.localeCompare(b.name));
-        break;
-      case 'price-high-low':
-        result = result.sort((a, b) => b.price - a.price);
-        break;
-      case 'price-low-high':
-        result = result.sort((a, b) => a.price - b.price);
-        break;
-    }
-
-    return result;
-  };
+  }, [products, searchTerm, sortOption, sortProducts]);
 
   const handleSortChange = (option: string) => {
     setSortOption(option);
   };
 
-  const displayProducts = filteredAndSortedProducts();
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+  };
 
-  return (
-    <div className="home-page">
-      <Header />
-      <Banner />
+  const handleBuyClick = (productId: number) => {
+    setSelectedProductId(productId);
+    setIsModalOpen(true);
+    setPaymentStep('form');
 
-      <main className="home-page__main">
-        <div className="home-page__search-container">
+    loadProductById(productId);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleContinueToSummary = (customerData: CustomerInfo, paymentData: PaymentInfo) => {
+    setCustomer(customerData);
+    setPayment(paymentData);
+    setPaymentStep('summary');
+  };
+
+  const handleProcessPayment = async () => {
+    if (!selectedProductId) return;
+
+    try {
+      const success = await processPayment(selectedProductId, 1);
+      setIsModalOpen(false);
+      navigate('/payment/result');
+    } catch (error) {
+      console.error('Payment failed:', error);
+    }
+  };
+
+  const selectedProduct = products.find(p => p.id === selectedProductId);
+
+  const renderMainContent = () => {
+    if (loading) {
+      return <Loading />;
+    }
+
+    if (error) {
+      return (
+        <div className="home-page__error">
+          <h2>Error al cargar los productos</h2>
+          <p>{error}</p>
+        </div>
+      );
+    }
+
+    return (
+      <>
+        <form
+          className="home-page__search-container"
+          onSubmit={handleSearch}
+        >
           <input
             type="text"
             className="home-page__search-input"
@@ -99,8 +115,13 @@ const HomePage: React.FC = () => {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <button className="home-page__search-button">Buscar</button>
-        </div>
+          <button
+            className="home-page__search-button"
+            type="submit"
+          >
+            Buscar
+          </button>
+        </form>
 
         <div className="home-page__content">
           <aside className="home-page__sidebar">
@@ -122,15 +143,52 @@ const HomePage: React.FC = () => {
                 <ProductCard
                   key={product.id}
                   product={product}
+                  onBuyClick={handleBuyClick}
                 />
               ))}
             </div>
           </div>
         </div>
+      </>
+    );
+  };
+
+  return (
+    <div className="home-page">
+      <Header />
+      {!loading && !error && <Banner />}
+
+      <main className="home-page__main">
+        {renderMainContent()}
       </main>
 
       <Footer />
       <WhatsAppButton />
+
+      {selectedProduct && (
+        <Modal
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
+          title={paymentStep === 'form' ? "Información de Pago" : "Resumen de Pago"}
+          size="lg"
+        >
+          {paymentStep === 'form' ? (
+            <PaymentForm
+              onContinue={(customerData, paymentData) => handleContinueToSummary(customerData, paymentData)}
+            />
+          ) : (
+            <PaymentSummary
+              productName={selectedProduct.name}
+              productPrice={selectedProduct.price}
+              quantity={1}
+              baseFee={5000}
+              deliveryFee={10000}
+              onPay={handleProcessPayment}
+              isLoading={paymentLoading}
+            />
+          )}
+        </Modal>
+      )}
     </div>
   );
 };

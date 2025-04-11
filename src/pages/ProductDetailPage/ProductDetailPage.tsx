@@ -4,54 +4,63 @@ import Header from '../../components/layout/Header';
 import Footer from '../../components/layout/Footer';
 import WhatsAppButton from '../../components/common/WhatsAppButton';
 import ProductDetail from '../../components/product/ProductDetail';
-import { Loading } from '../../components/common';
+import Modal from '../../components/common/Modal';
+import PaymentForm from '../../components/payment/PaymentForm';
+import PaymentSummary from '../../components/payment/PaymentSummary';
+import Loading from '../../components/common/Loading';
+import { useProducts } from '../../hooks/useProduct';
+import { usePayment } from '../../hooks/usePayment';
 import './ProductDetailPage.scss';
+import { CustomerInfo, PaymentInfo } from '../../types';
 
-const mockProducts = [
-    {
-        id: 1,
-        name: 'Bicicleta Montañera Elite',
-        description: 'Bicicleta de montaña con marco de aluminio, suspensión delantera y 21 velocidades. Ideal para terrenos difíciles y senderos de montaña. Incluye frenos de disco hidráulicos para mayor seguridad y control en descensos empinados. Los neumáticos tienen un dibujo agresivo para mejor tracción en terrenos variados.',
-        price: 1299000,
-        imageUrl: 'https://images.unsplash.com/photo-1571068316344-75bc76f77890?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
-        stock: 15,
-        isBestSeller: true
-    },
-    {
-        id: 2,
-        name: 'Bicicleta Urbana Clásica',
-        description: 'Bicicleta urbana con estilo retro, ideal para desplazamientos diarios en la ciudad. Incluye portaequipajes y luces LED. Su diseño ergonómico permite una postura cómoda para trayectos prolongados. Cuenta con cambios integrados en el buje para un mantenimiento reducido.',
-        price: 850000,
-        imageUrl: 'https://images.unsplash.com/photo-1485965120184-e220f721d03e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
-        stock: 8,
-        isBestSeller: false
-    },
-];
 
 const ProductDetailPage: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
 
-    const [product, setProduct] = useState<any | null>(null);
-    const [loading, setLoading] = useState(true);
+    const { selectedProduct, loading, error, loadProductById } = useProducts();
+    const {
+        processPayment,
+        loading: paymentLoading,
+        setCustomer,
+        setPayment
+    } = usePayment();
 
     useEffect(() => {
-        setLoading(true);
+        if (id) {
+            loadProductById(parseInt(id));
+        }
+    }, [id, loadProductById]);
 
-        const timer = setTimeout(() => {
-            const foundProduct = mockProducts.find(p => p.id === parseInt(id || '0'));
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [paymentStep, setPaymentStep] = useState<'form' | 'summary'>('form');
 
-            if (foundProduct) {
-                setProduct(foundProduct);
-            } else {
-                navigate('/');
-            }
+    const handleBuyClick = () => {
+        setIsModalOpen(true);
+        setPaymentStep('form');
+    };
 
-            setLoading(false);
-        }, 800);
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+    };
 
-        return () => clearTimeout(timer);
-    }, [id, navigate]);
+    const handleContinueToSummary = (customerData: CustomerInfo, paymentData: PaymentInfo) => {
+        setCustomer(customerData);
+        setPayment(paymentData);
+        setPaymentStep('summary');
+    };
+
+    const handleProcessPayment = async () => {
+        if (!selectedProduct) return;
+
+        try {
+            const success = await processPayment(selectedProduct.id, selectedProduct.price);
+            setIsModalOpen(false);
+            navigate('/payment/result');
+        } catch (error) {
+            console.error('Payment failed:', error);
+        }
+    };
 
     return (
         <div className="product-detail-page">
@@ -60,10 +69,21 @@ const ProductDetailPage: React.FC = () => {
             <main className="product-detail-page__main">
                 {loading ? (
                     <Loading />
-                ) : product ? (
+                ) : error ? (
+                    <div className="product-detail-page__error">
+                        <h2>Error al cargar el producto</h2>
+                        <p>{error}</p>
+                        <button
+                            className="product-detail-page__back-button"
+                            onClick={() => navigate('/')}
+                        >
+                            Volver a la tienda
+                        </button>
+                    </div>
+                ) : selectedProduct ? (
                     <ProductDetail
-                        product={product}
-                        onBuyClick={() => {}}
+                        product={selectedProduct}
+                        onBuyClick={handleBuyClick}
                     />
                 ) : (
                     <div className="product-detail-page__error">
@@ -81,6 +101,31 @@ const ProductDetailPage: React.FC = () => {
 
             <Footer />
             <WhatsAppButton />
+
+            {selectedProduct && (
+                <Modal
+                    isOpen={isModalOpen}
+                    onClose={handleCloseModal}
+                    title={paymentStep === 'form' ? "Información de Pago" : "Resumen de Pago"}
+                    size="lg"
+                >
+                    {paymentStep === 'form' ? (
+                        <PaymentForm
+                            onContinue={(customerData, paymentData) => handleContinueToSummary(customerData, paymentData)}
+                        />
+                    ) : (
+                        <PaymentSummary
+                            productName={selectedProduct.name}
+                            productPrice={selectedProduct.price}
+                            quantity={1}
+                            baseFee={5000}
+                            deliveryFee={10000}
+                            onPay={handleProcessPayment}
+                            isLoading={paymentLoading}
+                        />
+                    )}
+                </Modal>
+            )}
         </div>
     );
 };
